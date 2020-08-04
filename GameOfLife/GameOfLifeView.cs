@@ -26,6 +26,9 @@ namespace GameOfLife
             Console.ForegroundColor = ConsoleColor.Blue;
             Console.OutputEncoding = Encoding.Unicode;
 
+
+            int minDelay = 10;
+            int maxDelay = 500;
             int timeDelay = 150;
             int generation = 0;
             int population;
@@ -61,8 +64,36 @@ namespace GameOfLife
                     Console.Write($"Population: {population, -10} | Population Direction: {(population-priorPopulation == 0 ? "\u2192" : (population-priorPopulation > 0 ? "\u2191" : "\u2193")), -10} | Generation: {generation, -10}");
                     priorPopulation = population;
                 }
+                CheckSpeedAdjustment(ref timeDelay);
+                if(timeDelay < minDelay)
+                {
+                    timeDelay = minDelay;
+                }
+                else if(timeDelay > maxDelay)
+                {
+                    timeDelay = maxDelay;
+                }
                 now = DateTime.Now;
             }
+        }
+
+        private void CheckSpeedAdjustment(ref int currentSpeed)
+        {
+            int offset = 0;
+            ConsoleKeyInfo pressed = new ConsoleKeyInfo('n', ConsoleKey.N, false, false, false);
+            if (Console.KeyAvailable)
+            {
+                pressed = Console.ReadKey(true);
+                if(pressed.Key == ConsoleKey.DownArrow)
+                {
+                    offset = 10;
+                }
+                if(pressed.Key == ConsoleKey.UpArrow)
+                {
+                    offset = -10;
+                }
+            }
+            currentSpeed += offset;
         }
     }
 }
