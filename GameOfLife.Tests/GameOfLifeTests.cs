@@ -5,13 +5,6 @@ namespace GameOfLife.Tests
 {
     public class GameOfLifeTests
     {
-        /*
-        [SetUp]
-        public void Setup()
-        {
-        }
-        */
-
         public static bool[,] testGridRule1 =
         {
             { false, false, true, false, false },
@@ -85,6 +78,7 @@ namespace GameOfLife.Tests
         };
 
         [Test]
+        [Category("Rules")]
         public void TestRule1()
         {
             GameOfLife game = new GameOfLife();
@@ -92,6 +86,7 @@ namespace GameOfLife.Tests
         }
 
         [Test]
+        [Category("Rules")]
         public void TestRule2()
         {
             GameOfLife game = new GameOfLife();
@@ -99,6 +94,7 @@ namespace GameOfLife.Tests
         }
 
         [Test]
+        [Category("Rules")]
         public void TestRule3()
         {
             GameOfLife game = new GameOfLife();
@@ -106,6 +102,7 @@ namespace GameOfLife.Tests
         }
 
         [Test]
+        [Category("Rules")]
         public void TestRule4()
         {
             GameOfLife game = new GameOfLife();
