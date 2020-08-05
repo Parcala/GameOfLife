@@ -9,7 +9,8 @@ namespace GameOfLife
         public void Start()
         {
             //set the initial speed, lower is faster
-            int timeDelay = 105;
+            //105 is a good pace, set to 150 for the purpose of presenting
+            int timeDelay = 150;
 
             while (true)
             {
