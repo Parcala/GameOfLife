@@ -80,7 +80,7 @@ namespace GameOfLife
                                 if (map[row, col])
                                 {
                                     population++;
-                                    line.Append("O");
+                                    line.Append("●");
                                 }
                                 else
                                 {
