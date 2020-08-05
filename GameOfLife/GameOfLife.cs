@@ -15,14 +15,6 @@ namespace GameOfLife
                 for (int col = 0; col < start.GetLength(1); col++)
                 {
                     newGrid[row, col] = start[row, col];
-                }
-            }
-
-
-            for (int row = 0; row < start.GetLength(0); row++)
-            {
-                for (int col = 0; col < start.GetLength(1); col++)
-                {
                     int neighbors = NeighborCount(start, row, col);
                     if(neighbors < 2 || neighbors > 3)
                     {
