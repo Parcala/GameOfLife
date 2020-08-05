@@ -21,7 +21,7 @@ namespace GameOfLife
                 {
                     int thisRow = random.Next(rows);
                     int thisCol = random.Next(cols);
-                    if(map[thisRow, thisCol])
+                    if(!map[thisRow, thisCol])
                     {
                         initialPopulation++;
                     }
@@ -71,7 +71,7 @@ namespace GameOfLife
                         }
                         map = game.LifeGenerator(map);
                         Console.WriteLine();
-                        Console.Write($"Population: {population,-10} | Population Direction: {(population - priorPopulation == 0 ? "\u2192" : (population - priorPopulation > 0 ? "\u2191" : "\u2193")),-10} | Generation: {generation,-10}");
+                        Console.Write($"Population: {population,-5}{(double)population/initialPopulation, 5:P} | Population Direction: {(population - priorPopulation == 0 ? "\u2192" : (population - priorPopulation > 0 ? "\u2191" : "\u2193")),-10} | Generation: {generation,-10}");
                         priorPopulation = population;
                     }
                     CheckSpeedAdjustment(ref timeDelay);
