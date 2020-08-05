@@ -14,8 +14,8 @@ namespace GameOfLife
                 GameOfLife game = new GameOfLife();
                 Random random = new Random();
 
-                int rows = 49;
-                int cols = 99;
+                int rows = 58;
+                int cols = 199;
 
                 int initialPopulation = 0;
                 bool[,] map = new bool[rows, cols];
