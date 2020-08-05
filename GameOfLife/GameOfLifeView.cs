@@ -13,11 +13,14 @@ namespace GameOfLife
             {
                 GameOfLife game = new GameOfLife();
                 Random random = new Random();
+
                 int rows = 49;
                 int cols = 99;
+
                 int initialPopulation = 0;
                 bool[,] map = new bool[rows, cols];
-                for (int life = 0; life < 750; life++)
+
+                for (int life = 0; life < (rows*cols/5); life++)
                 {
                     int thisRow = random.Next(rows);
                     int thisCol = random.Next(cols);
@@ -32,11 +35,11 @@ namespace GameOfLife
                 DateTime now = DateTime.Now;
 
                 Console.SetWindowSize(cols + 1, rows + 3);
-                Console.CursorVisible = false;
+                
                 Console.ForegroundColor = ConsoleColor.Blue;
                 Console.OutputEncoding = Encoding.Unicode;
 
-                int minDelay = 10;
+                int minDelay = 15;
                 int maxDelay = 500;
                 
                 int generation = 0;
@@ -45,6 +48,7 @@ namespace GameOfLife
 
                 while (true)
                 {
+                    Console.CursorVisible = false;
                     if ((now - start).Milliseconds > timeDelay)
                     {
                         population = 0;
@@ -88,9 +92,28 @@ namespace GameOfLife
                     {
                         break;
                     }
+                    if(CheckSeedLife())
+                    {
+                        int thisRow = random.Next(rows);
+                        int thisCol = random.Next(cols);
+                        map[thisRow, thisCol] = true;
+                    }
                 }
             }
         }
+
+        private bool CheckSeedLife()
+        {
+            if (Console.KeyAvailable)
+            {
+                if (Console.ReadKey(true).Key == ConsoleKey.N)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
 
         private bool CheckRestart()
         {
