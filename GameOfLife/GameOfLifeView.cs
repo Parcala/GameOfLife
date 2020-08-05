@@ -8,18 +8,23 @@ namespace GameOfLife
     {
         public void Start()
         {
+            //set the initial speed, lower is faster
             int timeDelay = 105;
+
             while (true)
             {
                 GameOfLife game = new GameOfLife();
                 Random random = new Random();
 
+                //set the height, then width
                 int rows = 58;
                 int cols = 199;
 
+                //initialize the map with no life
                 int initialPopulation = 0;
                 bool[,] map = new bool[rows, cols];
 
+                //randomly seed life, based on the size of the map
                 for (int spawnTryCount = 0; spawnTryCount < (rows*cols/5); spawnTryCount++)
                 {
                     int thisRow = random.Next(rows);
@@ -31,17 +36,23 @@ namespace GameOfLife
                     map[thisRow, thisCol] = true;
                 }
 
+                //set variable for keeping the pace
                 DateTime start = DateTime.Now;
                 DateTime now = DateTime.Now;
 
+                //set the window size so that it doesn't cause issues
                 Console.SetWindowSize(cols + 1, rows + 3);
-                
+
+                //set display output color and type so all symbols display properly
+                Console.BackgroundColor = ConsoleColor.Black;
                 Console.ForegroundColor = ConsoleColor.Blue;
                 Console.OutputEncoding = Encoding.Unicode;
 
+                //used to confine the speed to thesh-holds
                 int minDelay = 15;
                 int maxDelay = 500;
                 
+                //used for display and determining if the board should be reset
                 int generation = 0;
                 int population;
                 int priorPopulation = 0;
@@ -49,7 +60,10 @@ namespace GameOfLife
 
                 while (life)
                 {
+                    //set cursor to invisible here, incase board was resized (larger) this makes it go away again
                     Console.CursorVisible = false;
+
+                    //if enough time has passed update the board
                     if ((now - start).Milliseconds > timeDelay)
                     {
                         population = 0;
@@ -74,10 +88,17 @@ namespace GameOfLife
                             }
                             Console.WriteLine(line);
                         }
+
+                        // determine the next generation
                         map = game.LifeGenerator(map);
+
+                        //add a line and write the statistics
                         Console.WriteLine();
                         Console.Write($"Population: {population,-5}{(double)population/initialPopulation, 5:P} | Population Direction: {(population - priorPopulation == 0 ? "\u2192" : (population - priorPopulation > 0 ? "\u2191" : "\u2193")),-10} | Generation: {generation,-10}");
                         priorPopulation = population;
+
+                        //check to see if the user wants to make any changes
+                        //up arrow increases speed, down arrow slows it down, n adds new life, and r restarts with a new random board
                         if(Console.KeyAvailable)
                         {
                             if(ModifyGame(ref timeDelay, ref life))
@@ -86,17 +107,19 @@ namespace GameOfLife
                                 int thisCol = random.Next(cols);
                                 map[thisRow, thisCol] = true;
                             }
-                        }
-                        
-                        if (timeDelay < minDelay)
-                        {
-                            timeDelay = minDelay;
-                        }
-                        else if (timeDelay > maxDelay)
-                        {
-                            timeDelay = maxDelay;
+
+                            //make sure the timedelay is within parameters, only needs checked here after it could be modified.
+                            if (timeDelay < minDelay)
+                            {
+                                timeDelay = minDelay;
+                            }
+                            else if (timeDelay > maxDelay)
+                            {
+                                timeDelay = maxDelay;
+                            }
                         }
                     }
+                    //set the current time for pacing
                     now = DateTime.Now;
                 }
             }
