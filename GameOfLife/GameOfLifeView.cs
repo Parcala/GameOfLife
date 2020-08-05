@@ -8,7 +8,7 @@ namespace GameOfLife
     {
         public void Start()
         {
-            int timeDelay = 150;
+            int timeDelay = 105;
             while (true)
             {
                 GameOfLife game = new GameOfLife();
@@ -20,7 +20,7 @@ namespace GameOfLife
                 int initialPopulation = 0;
                 bool[,] map = new bool[rows, cols];
 
-                for (int life = 0; life < (rows*cols/5); life++)
+                for (int spawnTryCount = 0; spawnTryCount < (rows*cols/5); spawnTryCount++)
                 {
                     int thisRow = random.Next(rows);
                     int thisCol = random.Next(cols);
@@ -45,8 +45,9 @@ namespace GameOfLife
                 int generation = 0;
                 int population;
                 int priorPopulation = 0;
+                bool life = true;
 
-                while (true)
+                while (life)
                 {
                     Console.CursorVisible = false;
                     if ((now - start).Milliseconds > timeDelay)
@@ -77,73 +78,54 @@ namespace GameOfLife
                         Console.WriteLine();
                         Console.Write($"Population: {population,-5}{(double)population/initialPopulation, 5:P} | Population Direction: {(population - priorPopulation == 0 ? "\u2192" : (population - priorPopulation > 0 ? "\u2191" : "\u2193")),-10} | Generation: {generation,-10}");
                         priorPopulation = population;
-                    }
-                    CheckSpeedAdjustment(ref timeDelay);
-                    if (timeDelay < minDelay)
-                    {
-                        timeDelay = minDelay;
-                    }
-                    else if (timeDelay > maxDelay)
-                    {
-                        timeDelay = maxDelay;
+                        if(Console.KeyAvailable)
+                        {
+                            if(ModifyGame(ref timeDelay, ref life))
+                            {
+                                int thisRow = random.Next(rows);
+                                int thisCol = random.Next(cols);
+                                map[thisRow, thisCol] = true;
+                            }
+                        }
+                        
+                        if (timeDelay < minDelay)
+                        {
+                            timeDelay = minDelay;
+                        }
+                        else if (timeDelay > maxDelay)
+                        {
+                            timeDelay = maxDelay;
+                        }
                     }
                     now = DateTime.Now;
-                    if(CheckRestart())
-                    {
-                        break;
-                    }
-                    if(CheckSeedLife())
-                    {
-                        int thisRow = random.Next(rows);
-                        int thisCol = random.Next(cols);
-                        map[thisRow, thisCol] = true;
-                    }
                 }
             }
         }
 
-        private bool CheckSeedLife()
-        {
-            if (Console.KeyAvailable)
-            {
-                if (Console.ReadKey(true).Key == ConsoleKey.N)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-
-        private bool CheckRestart()
-        {
-            if(Console.KeyAvailable)
-            {
-                if(Console.ReadKey(true).Key == ConsoleKey.R)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        private void CheckSpeedAdjustment(ref int currentSpeed)
+        private bool ModifyGame(ref int currentSpeed, ref bool life)
         {
             int offset = 0;
-            ConsoleKeyInfo pressed = new ConsoleKeyInfo('n', ConsoleKey.N, false, false, false);
-            if (Console.KeyAvailable)
+            ConsoleKeyInfo pressed = Console.ReadKey(true);
+            if (pressed.Key == ConsoleKey.DownArrow)
             {
-                pressed = Console.ReadKey(true);
-                if(pressed.Key == ConsoleKey.DownArrow)
-                {
-                    offset = 10;
-                }
-                if(pressed.Key == ConsoleKey.UpArrow)
-                {
-                    offset = -10;
-                }
+                offset = 10;
+            }
+            if (pressed.Key == ConsoleKey.UpArrow)
+            {
+                offset = -10;
             }
             currentSpeed += offset;
+
+            if(pressed.Key == ConsoleKey.R)
+            {
+                life = false;
+            }
+
+            if(pressed.Key == ConsoleKey.N)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }
