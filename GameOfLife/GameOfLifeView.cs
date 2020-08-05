@@ -96,30 +96,31 @@ namespace GameOfLife
                         //add a line and write the statistics
                         Console.WriteLine();
                         Console.Write($"Population: {population,-5}{(double)population/initialPopulation, 5:P} | Population Direction: {(population - priorPopulation == 0 ? "\u2192" : (population - priorPopulation > 0 ? "\u2191" : "\u2193")),-10} | Generation: {generation,-10}");
-                        priorPopulation = population;
+                        priorPopulation = population;                        
+                    }
 
-                        //check to see if the user wants to make any changes
-                        //up arrow increases speed, down arrow slows it down, n adds new life, and r restarts with a new random board
-                        if(Console.KeyAvailable)
+                    //check to see if the user wants to make any changes
+                    //up arrow increases speed, down arrow slows it down, n adds new life, and r restarts with a new random board
+                    if (Console.KeyAvailable)
+                    {
+                        if (ModifyGame(ref timeDelay, ref life))
                         {
-                            if(ModifyGame(ref timeDelay, ref life))
-                            {
-                                int thisRow = random.Next(rows);
-                                int thisCol = random.Next(cols);
-                                map[thisRow, thisCol] = true;
-                            }
+                            int thisRow = random.Next(rows);
+                            int thisCol = random.Next(cols);
+                            map[thisRow, thisCol] = true;
+                        }
 
-                            //make sure the timedelay is within parameters, only needs checked here after it could be modified.
-                            if (timeDelay < minDelay)
-                            {
-                                timeDelay = minDelay;
-                            }
-                            else if (timeDelay > maxDelay)
-                            {
-                                timeDelay = maxDelay;
-                            }
+                        //make sure the timedelay is within parameters, only needs checked here after it could be modified.
+                        if (timeDelay < minDelay)
+                        {
+                            timeDelay = minDelay;
+                        }
+                        else if (timeDelay > maxDelay)
+                        {
+                            timeDelay = maxDelay;
                         }
                     }
+
                     //set the current time for pacing
                     now = DateTime.Now;
                 }
