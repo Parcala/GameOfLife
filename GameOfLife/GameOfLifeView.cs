@@ -17,9 +17,14 @@ namespace GameOfLife
                 GameOfLife game = new GameOfLife();
                 Random random = new Random();
 
-                //set the height, then width
-                int rows = 58;
-                int cols = 199;
+                //set the height, then width, now should be set based on the consoles ability to scale
+                int rows = Console.LargestWindowHeight - 5; //was 58
+                int cols = Console.LargestWindowWidth - 5; //was 199
+
+                //set the window size so that it doesn't cause issues
+                Console.SetWindowSize(cols + 1, rows + 3);
+
+
 
                 //initialize the map with no life
                 int initialPopulation = 0;
@@ -40,9 +45,6 @@ namespace GameOfLife
                 //set variable for keeping the pace
                 DateTime start = DateTime.Now;
                 DateTime now = DateTime.Now;
-
-                //set the window size so that it doesn't cause issues
-                Console.SetWindowSize(cols + 1, rows + 3);
 
                 //set display output color and type so all symbols display properly
                 Console.BackgroundColor = ConsoleColor.Black;
